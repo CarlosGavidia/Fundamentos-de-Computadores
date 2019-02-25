@@ -1,0 +1,33 @@
+   1              	# 1 "../practica1b.asm"
+   1              	
+   0              	
+   0              	
+   0              	
+   2              	.global Es_multiplo
+   3              	
+   4              	.text
+   5              	
+   6              	Es_multiplo:
+   7 0000 04402DE5 			push {r4}
+   8 0004 0140A0E3 			mov r4, #1	//registro temporal donde se indica si primo
+   9              						//se considera primo por defecto
+  10 0008 000050E3 	while:	cmp r0, #0
+  11 000c 010000DA 			ble fin_while
+  12 0010 010040E0 			sub r0, r0, r1
+  13 0014 FBFFFFEA 			b while
+  14 0018 000050E3 	fin_while:	cmp r0, #0
+  15 001c 0000001A 				bne fin
+  16 0020 0040A0E3 				mov r4, #0
+  17 0024 0400A0E1 	fin:	mov r0, r4
+  18 0028 04409DE4 			pop {r4}
+  19 002c 0EF0A0E1 			mov pc, lr
+  20              	.end
+DEFINED SYMBOLS
+   ../practica1b.asm:6      .text:00000000 Es_multiplo
+   ../practica1b.asm:7      .text:00000000 $a
+   ../practica1b.asm:10     .text:00000008 while
+   ../practica1b.asm:14     .text:00000018 fin_while
+   ../practica1b.asm:17     .text:00000024 fin
+                   .debug_aranges:0000000c $d
+
+NO UNDEFINED SYMBOLS

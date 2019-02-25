@@ -1,0 +1,73 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ./pract1a.o
+LOAD ./practica1b.o
+START GROUP
+LOAD c:/users/gavo/desktop/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a
+LOAD c:/users/gavo/desktop/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib\libc.a
+END GROUP
+                0x0c000000                . = 0xc000000
+
+.data           0x0c000000       0x10
+ *(.data)
+ .data          0x0c000000       0x10 ./pract1a.o
+ .data          0x0c000010        0x0 ./practica1b.o
+ *(.rodata)
+
+.bss            0x0c000010       0x10
+ *(.bss)
+ .bss           0x0c000010       0x10 ./pract1a.o
+ .bss           0x0c000020        0x0 ./practica1b.o
+
+.text           0x0c000020       0xec
+ *(.text)
+ .text          0x0c000020       0xbc ./pract1a.o
+                0x0c000020                start
+ .text          0x0c0000dc       0x30 ./practica1b.o
+                0x0c0000dc                Es_multiplo
+                0x0c00010c                PROVIDE (end, .)
+                0x0c700800                PROVIDE (_stack, 0xc700800)
+OUTPUT(pract1a.elf elf32-littlearm)
+
+.glue_7         0x0c00010c        0x0
+ .glue_7        0x00000000        0x0 linker stubs
+
+.glue_7t        0x0c00010c        0x0
+ .glue_7t       0x00000000        0x0 linker stubs
+
+.vfp11_veneer   0x0c00010c        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x0c00010c        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.ARM.attributes
+                0x00000000       0x22
+ .ARM.attributes
+                0x00000000       0x22 ./pract1a.o
+ .ARM.attributes
+                0x00000022       0x22 ./practica1b.o
+
+.debug_line     0x00000000       0xb4
+ .debug_line    0x00000000       0x6a ./pract1a.o
+ .debug_line    0x0000006a       0x4a ./practica1b.o
+
+.debug_info     0x00000000       0xc5
+ .debug_info    0x00000000       0x61 ./pract1a.o
+ .debug_info    0x00000061       0x64 ./practica1b.o
+
+.debug_abbrev   0x00000000       0x28
+ .debug_abbrev  0x00000000       0x14 ./pract1a.o
+ .debug_abbrev  0x00000014       0x14 ./practica1b.o
+
+.debug_aranges  0x00000000       0x40
+ .debug_aranges
+                0x00000000       0x20 ./pract1a.o
+ .debug_aranges
+                0x00000020       0x20 ./practica1b.o

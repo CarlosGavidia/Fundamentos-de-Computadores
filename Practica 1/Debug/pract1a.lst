@@ -1,0 +1,191 @@
+
+pract1a.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000010  0c000000  0c000000  00008000  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .bss          00000010  0c000010  0c000010  00008010  2**0
+                  ALLOC
+  2 .text         000000ec  0c000020  0c000020  00008020  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  3 .ARM.attributes 00000022  00000000  00000000  0000810c  2**0
+                  CONTENTS, READONLY
+  4 .debug_line   000000b4  00000000  00000000  0000812e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   000000c5  00000000  00000000  000081e2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000028  00000000  00000000  000082a7  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_aranges 00000040  00000000  00000000  000082d0  2**3
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+0c000020 <start>:
+.bss
+B:		.space 4*N
+.text
+start:
+
+		ldr r0, = A
+ c000020:	e59f00ac 	ldr	r0, [pc, #172]	; c0000d4 <fin_par+0x4>
+		mov r7, r0
+ c000024:	e1a07000 	mov	r7, r0
+		ldr r5,= B
+ c000028:	e59f50a8 	ldr	r5, [pc, #168]	; c0000d8 <fin_par+0x8>
+		mov r6, #0
+ c00002c:	e3a06000 	mov	r6, #0
+
+0c000030 <for1>:
+		for1:cmp r6, #N
+ c000030:	e3560004 	cmp	r6, #4
+			bge fin
+ c000034:	aa000009 	bge	c000060 <fin>
+			bl mayor
+ c000038:	eb000009 	bl	c000064 <mayor>
+
+0c00003c <if3>:
+			if3:cmp r0, #-1
+ c00003c:	e3700001 	cmn	r0, #1
+				beq else3
+ c000040:	0a000004 	beq	c000058 <else3>
+				ldr r1,[r7,r0,lsl#2]
+ c000044:	e7971100 	ldr	r1, [r7, r0, lsl #2]
+				str r1, [r5,r6,lsl#2]
+ c000048:	e7851106 	str	r1, [r5, r6, lsl #2]
+				mov r1, #0
+ c00004c:	e3a01000 	mov	r1, #0
+				str r1, [r7,r0,lsl#2]
+ c000050:	e7871100 	str	r1, [r7, r0, lsl #2]
+				b else3
+ c000054:	eaffffff 	b	c000058 <else3>
+
+0c000058 <else3>:
+			else3:add r6,r6,#1
+ c000058:	e2866001 	add	r6, r6, #1
+					b for1
+ c00005c:	eafffff3 	b	c000030 <for1>
+
+0c000060 <fin>:
+		fin:b .
+ c000060:	eafffffe 	b	c000060 <fin>
+
+0c000064 <mayor>:
+
+		mayor:push {r1,r2,r3,r5,lr}
+ c000064:	e92d402e 	push	{r1, r2, r3, r5, lr}
+			mov r3, r0
+ c000068:	e1a03000 	mov	r3, r0
+			mov r1, #-1
+ c00006c:	e3e01000 	mvn	r1, #0
+			mov r5, #-1
+ c000070:	e3e05000 	mvn	r5, #0
+			mov r2, #0
+ c000074:	e3a02000 	mov	r2, #0
+
+0c000078 <for>:
+			for:cmp r2, #N
+ c000078:	e3520004 	cmp	r2, #4
+				bge fin_for
+ c00007c:	aa00000a 	bge	c0000ac <fin_for>
+				ldr r0, [r3, r2,lsl#2]
+ c000080:	e7930102 	ldr	r0, [r3, r2, lsl #2]
+
+0c000084 <if2>:
+				if2:cmp r0, r1
+ c000084:	e1500001 	cmp	r0, r1
+					ble else2
+ c000088:	da000005 	ble	c0000a4 <else2>
+					bl par
+ c00008c:	eb000009 	bl	c0000b8 <par>
+
+0c000090 <if1>:
+					if1:cmp r0, #1
+ c000090:	e3500001 	cmp	r0, #1
+						bne else2
+ c000094:	1a000002 	bne	c0000a4 <else2>
+						mov r1, r0
+ c000098:	e1a01000 	mov	r1, r0
+						mov r5, r2
+ c00009c:	e1a05002 	mov	r5, r2
+						b else2
+ c0000a0:	eaffffff 	b	c0000a4 <else2>
+
+0c0000a4 <else2>:
+				else2: add r2,r2,#1
+ c0000a4:	e2822001 	add	r2, r2, #1
+						b for
+ c0000a8:	eafffff2 	b	c000078 <for>
+
+0c0000ac <fin_for>:
+			fin_for:mov r0 ,r5
+ c0000ac:	e1a00005 	mov	r0, r5
+			pop {r1,r2,r3,r5,lr}
+ c0000b0:	e8bd402e 	pop	{r1, r2, r3, r5, lr}
+					mov pc,lr
+ c0000b4:	e1a0f00e 	mov	pc, lr
+
+0c0000b8 <par>:
+
+
+		par:and r0,r0,#1
+ c0000b8:	e2000001 	and	r0, r0, #1
+
+0c0000bc <if>:
+			if:cmp r0, #0
+ c0000bc:	e3500000 	cmp	r0, #0
+				bne else
+ c0000c0:	1a000001 	bne	c0000cc <else>
+				mov r0,#1
+ c0000c4:	e3a00001 	mov	r0, #1
+				b fin_par
+ c0000c8:	ea000000 	b	c0000d0 <fin_par>
+
+0c0000cc <else>:
+			else:mov r0, #0
+ c0000cc:	e3a00000 	mov	r0, #0
+
+0c0000d0 <fin_par>:
+		fin_par:mov pc,lr
+ c0000d0:	e1a0f00e 	mov	pc, lr
+ c0000d4:	0c000000 	.word	0x0c000000
+ c0000d8:	0c000010 	.word	0x0c000010
+
+0c0000dc <Es_multiplo>:
+.global Es_multiplo
+
+.text
+
+Es_multiplo:
+		push {r4}
+ c0000dc:	e52d4004 	push	{r4}		; (str r4, [sp, #-4]!)
+		mov r4, #1	//registro temporal donde se indica si primo
+ c0000e0:	e3a04001 	mov	r4, #1
+
+0c0000e4 <while>:
+					//se considera primo por defecto
+while:	cmp r0, #0
+ c0000e4:	e3500000 	cmp	r0, #0
+		ble fin_while
+ c0000e8:	da000001 	ble	c0000f4 <fin_while>
+		sub r0, r0, r1
+ c0000ec:	e0400001 	sub	r0, r0, r1
+		b while
+ c0000f0:	eafffffb 	b	c0000e4 <while>
+
+0c0000f4 <fin_while>:
+fin_while:	cmp r0, #0
+ c0000f4:	e3500000 	cmp	r0, #0
+			bne fin
+ c0000f8:	1a000000 	bne	c000100 <fin>
+			mov r4, #0
+ c0000fc:	e3a04000 	mov	r4, #0
+
+0c000100 <fin>:
+fin:	mov r0, r4
+ c000100:	e1a00004 	mov	r0, r4
+		pop {r4}
+ c000104:	e49d4004 	pop	{r4}		; (ldr r4, [sp], #4)
+		mov pc, lr
+ c000108:	e1a0f00e 	mov	pc, lr
