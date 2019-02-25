@@ -1,0 +1,112 @@
+   1              	# 1 "../practica3a.asm"
+   1              	/*
+   0              	
+   0              	
+   0              	
+   2              	 * practica3a.asm
+   3              	 *
+   4              	 *  Created on: 24/04/2015
+   5              	 *      Author: GAVO
+   6              	 */
+   7              	.global start
+   8              	
+   9              	.EQU N, 8
+  10              	
+  11              	.data
+  12 0000 07000000 	A: .word 7,3,25,4,75,2,1,1
+  12      03000000 
+  12      19000000 
+  12      04000000 
+  12      4B000000 
+  13              	
+  14              	.bss
+  15 0000 00000000 	B: .space N*4
+  15      00000000 
+  15      00000000 
+  15      00000000 
+  15      00000000 
+  16 0020 00000000 	max: .space 4
+  17 0024 00000000 	ind: .space 4
+  18              	
+  19              	.text
+  20              	start:
+  21 0000 0030A0E3 			MOV R3, #0 @ Inicializo un indice R3 a 0 para recorrer el vector A
+  22 0004 0040A0E3 			MOV R4, #0 @ Inicializo un indice R4 a 0 para recorrer el vector B
+  23              	
+  24 0008 70109FE5 			LDR R1, = A @ Cargo en R1 la direccion de comienzo del vector asociado a la etiqueta A.
+  25 000c 0820A0E3 			LDR R2, = N @ Cargo en R2 la direccion de memoria asociada a la variable N.
+  26 0010 6C509FE5 			LDR R5, = B @ Cargo en R5 la direccion de comienzo del vector asociado a la etiqueta B.
+  27              	
+  28 0014 C2D6A0E3 			MOV SP, #0x0c200000 @Inicializamos el puntero de PILA.
+  29              	
+  30 0018 000000EB 			BL FUNCION_MAX
+  31              	
+  32 001c FEFFFFEA 			B .
+  33              	
+  34              	FUNCION_MAX:
+  35 0020 08D04DE2 		SUB SP, SP, #8 @Reservamos espacio para 2 elementos.
+  36              	
+  37              		/*PROLOGO*/
+  38 0024 04408DE5 			STR R4, [SP, #4]
+  39 0028 00508DE5 			STR R5, [SP, #0]
+  40              	
+  41 002c 0040A0E3 			MOV R4, #0 @ Inicializo un indice R4 a 0 para recorrer el vector A
+  42 0030 50509FE5 			LDR R5, = max @ Cargo en R5 la direccion de memoria asociada a la etiqueta max.
+  43 0034 004085E5 			STR R4, [R5] @ Escribo 0 en max.
+  44 0038 4C609FE5 			LDR R6, = ind @ Cargo en R6 la direccion de memoria asociada a ind(LO QUE DEVOLVERA LA FUNCION).
+  45              	
+  46              		FOR_VECTOR_A:
+  47              	
+  48 003c 020054E1 				CMP R4, R2
+  49 0040 0A0000AA 				BGE FIN_FOR_VECTOR_A
+  50              	
+  51 0044 007095E5 				LDR R7, [R5] @ Cargo en R7 el valor maximo actual.
+  52 0048 048191E7 				LDR R8, [R1, R4, LSL#2] @ Cargo en R8 el valor contenido en la posicion del vector A correspondi
+  53              	
+  54 004c 070058E1 				CMP R8, R7 @ Si el valor del elemento leido del vector A en esta iteracion es mayor que el valor
+  55 0050 040000DA 				BLE INCREMENTAR_INDICE
+  56              	
+  57 0054 008085E5 				STR R8, [R5] @ Escribo en la direccion de memoria contenida en R5 el valor contenido en R8, es d
+  58 0058 004086E5 				STR R4, [R6] @Actualizo en MEMORIA el valor de la variable ind.
+  59              	
+  60 005c 0400A0E1 				MOV R0, R4 @ Actualizo el valor de retorno de la subrutina en R0.*/
+  61              				@LDR R8, [R5] @ Tambien cargo en R8 el valor del indice del vector A en esta iteracion para pode
+  62 0060 014084E2 				ADD R4, R4, #1 @ Incremento el indice en 1 para la siguiente iteracion del vector A.
+  63 0064 F4FFFFEA 				B FOR_VECTOR_A
+  64              		INCREMENTAR_INDICE:
+  65 0068 014084E2 				ADD R4, R4, #1 @ Incremento el indice en 1 para la siguiente iteracion del vector A.
+  66 006c F2FFFFEA 				B FOR_VECTOR_A
+  67              	
+  68              		FIN_FOR_VECTOR_A:
+  69              	
+  70              			/*EPILOGO*/
+  71              	
+  72              			@LDR R7, [SP, #0]
+  73 0070 00509DE5 			LDR R5, [SP, #0]
+  74 0074 04409DE5 			LDR R4, [SP, #4]
+  75              	
+  76 0078 08D08DE2 			ADD SP, SP, #8
+  77              	
+  78 007c 0EF0A0E1 			MOV PC, LR
+  79              	
+  80 0080 00000000 			.end
+  80      00000000 
+  80      20000000 
+  80      24000000 
+DEFINED SYMBOLS
+   ../practica3a.asm:20     .text:00000000 start
+   ../practica3a.asm:9      *ABS*:00000008 N
+   ../practica3a.asm:12     .data:00000000 A
+   ../practica3a.asm:15     .bss:00000000 B
+   ../practica3a.asm:15     .bss:00000000 $d
+   ../practica3a.asm:16     .bss:00000020 max
+   ../practica3a.asm:17     .bss:00000024 ind
+   ../practica3a.asm:21     .text:00000000 $a
+   ../practica3a.asm:34     .text:00000020 FUNCION_MAX
+   ../practica3a.asm:46     .text:0000003c FOR_VECTOR_A
+   ../practica3a.asm:68     .text:00000070 FIN_FOR_VECTOR_A
+   ../practica3a.asm:64     .text:00000068 INCREMENTAR_INDICE
+   ../practica3a.asm:80     .text:00000080 $d
+                   .debug_aranges:0000000c $d
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,131 @@
+
+practica3a.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000020  0c000000  0c000000  00008000  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .bss          00000028  0c000020  0c000020  00008020  2**0
+                  ALLOC
+  2 .text         00000090  0c000048  0c000048  00008048  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  3 .ARM.attributes 00000022  00000000  00000000  000080d8  2**0
+                  CONTENTS, READONLY
+  4 .debug_line   00000060  00000000  00000000  000080fa  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000067  00000000  00000000  0000815a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000014  00000000  00000000  000081c1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_aranges 00000020  00000000  00000000  000081d8  2**3
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+0c000048 <start>:
+max: .space 4
+ind: .space 4
+
+.text
+start:
+		MOV R3, #0 @ Inicializo un indice R3 a 0 para recorrer el vector A
+ c000048:	e3a03000 	mov	r3, #0
+		MOV R4, #0 @ Inicializo un indice R4 a 0 para recorrer el vector B
+ c00004c:	e3a04000 	mov	r4, #0
+
+		LDR R1, = A @ Cargo en R1 la direccion de comienzo del vector asociado a la etiqueta A.
+ c000050:	e59f1070 	ldr	r1, [pc, #112]	; c0000c8 <FIN_FOR_VECTOR_A+0x10>
+		LDR R2, = N @ Cargo en R2 la direccion de memoria asociada a la variable N.
+ c000054:	e3a02008 	mov	r2, #8
+		LDR R5, = B @ Cargo en R5 la direccion de comienzo del vector asociado a la etiqueta B.
+ c000058:	e59f506c 	ldr	r5, [pc, #108]	; c0000cc <FIN_FOR_VECTOR_A+0x14>
+
+		MOV SP, #0x0c200000 @Inicializamos el puntero de PILA.
+ c00005c:	e3a0d6c2 	mov	sp, #203423744	; 0xc200000
+
+		BL FUNCION_MAX
+ c000060:	eb000000 	bl	c000068 <FUNCION_MAX>
+
+		B .
+ c000064:	eafffffe 	b	c000064 <start+0x1c>
+
+0c000068 <FUNCION_MAX>:
+
+FUNCION_MAX:
+	SUB SP, SP, #8 @Reservamos espacio para 2 elementos.
+ c000068:	e24dd008 	sub	sp, sp, #8
+
+	/*PROLOGO*/
+		STR R4, [SP, #4]
+ c00006c:	e58d4004 	str	r4, [sp, #4]
+		STR R5, [SP, #0]
+ c000070:	e58d5000 	str	r5, [sp]
+
+		MOV R4, #0 @ Inicializo un indice R4 a 0 para recorrer el vector A
+ c000074:	e3a04000 	mov	r4, #0
+		LDR R5, = max @ Cargo en R5 la direccion de memoria asociada a la etiqueta max.
+ c000078:	e59f5050 	ldr	r5, [pc, #80]	; c0000d0 <FIN_FOR_VECTOR_A+0x18>
+		STR R4, [R5] @ Escribo 0 en max.
+ c00007c:	e5854000 	str	r4, [r5]
+		LDR R6, = ind @ Cargo en R6 la direccion de memoria asociada a ind(LO QUE DEVOLVERA LA FUNCION).
+ c000080:	e59f604c 	ldr	r6, [pc, #76]	; c0000d4 <FIN_FOR_VECTOR_A+0x1c>
+
+0c000084 <FOR_VECTOR_A>:
+
+	FOR_VECTOR_A:
+
+			CMP R4, R2
+ c000084:	e1540002 	cmp	r4, r2
+			BGE FIN_FOR_VECTOR_A
+ c000088:	aa00000a 	bge	c0000b8 <FIN_FOR_VECTOR_A>
+
+			LDR R7, [R5] @ Cargo en R7 el valor maximo actual.
+ c00008c:	e5957000 	ldr	r7, [r5]
+			LDR R8, [R1, R4, LSL#2] @ Cargo en R8 el valor contenido en la posicion del vector A correspondiente al indice en esta iteracion.
+ c000090:	e7918104 	ldr	r8, [r1, r4, lsl #2]
+
+			CMP R8, R7 @ Si el valor del elemento leido del vector A en esta iteracion es mayor que el valor actual de la variable asociada a max...
+ c000094:	e1580007 	cmp	r8, r7
+			BLE INCREMENTAR_INDICE
+ c000098:	da000004 	ble	c0000b0 <INCREMENTAR_INDICE>
+
+			STR R8, [R5] @ Escribo en la direccion de memoria contenida en R5 el valor contenido en R8, es decir hemos encontrado un nuevo valor maximo.*/
+ c00009c:	e5858000 	str	r8, [r5]
+			STR R4, [R6] @Actualizo en MEMORIA el valor de la variable ind.
+ c0000a0:	e5864000 	str	r4, [r6]
+
+			MOV R0, R4 @ Actualizo el valor de retorno de la subrutina en R0.*/
+ c0000a4:	e1a00004 	mov	r0, r4
+			@LDR R8, [R5] @ Tambien cargo en R8 el valor del indice del vector A en esta iteracion para poder luego actualizar el vector A y B.
+			ADD R4, R4, #1 @ Incremento el indice en 1 para la siguiente iteracion del vector A.
+ c0000a8:	e2844001 	add	r4, r4, #1
+			B FOR_VECTOR_A
+ c0000ac:	eafffff4 	b	c000084 <FOR_VECTOR_A>
+
+0c0000b0 <INCREMENTAR_INDICE>:
+	INCREMENTAR_INDICE:
+			ADD R4, R4, #1 @ Incremento el indice en 1 para la siguiente iteracion del vector A.
+ c0000b0:	e2844001 	add	r4, r4, #1
+			B FOR_VECTOR_A
+ c0000b4:	eafffff2 	b	c000084 <FOR_VECTOR_A>
+
+0c0000b8 <FIN_FOR_VECTOR_A>:
+	FIN_FOR_VECTOR_A:
+
+		/*EPILOGO*/
+
+		@LDR R7, [SP, #0]
+		LDR R5, [SP, #0]
+ c0000b8:	e59d5000 	ldr	r5, [sp]
+		LDR R4, [SP, #4]
+ c0000bc:	e59d4004 	ldr	r4, [sp, #4]
+
+		ADD SP, SP, #8
+ c0000c0:	e28dd008 	add	sp, sp, #8
+
+		MOV PC, LR
+ c0000c4:	e1a0f00e 	mov	pc, lr
+ c0000c8:	0c000000 	.word	0x0c000000
+ c0000cc:	0c000020 	.word	0x0c000020
+ c0000d0:	0c000040 	.word	0x0c000040
+ c0000d4:	0c000044 	.word	0x0c000044
