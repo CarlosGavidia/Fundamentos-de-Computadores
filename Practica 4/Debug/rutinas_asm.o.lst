@@ -1,0 +1,73 @@
+   1              	# 1 "../rutinas_asm.asm"
+   1              	/*-----------------------------------------------------------------
+   0              	
+   0              	
+   0              	
+   2              	**
+   3              	**  Fichero:
+   4              	**    rutinas_asm.asm  10/6/2014
+   5              	**
+   6              	**    Fundamentos de Computadores
+   7              	**    Dpto. de Arquitectura de Computadores y Automática
+   8              	**    Facultad de Informática. Universidad Complutense de Madrid
+   9              	**
+  10              	**
+  11              	**
+  12              	**  Notas de diseño:
+  13              	**
+  14              	**---------------------------------------------------------------*/
+  15              	.extern incrementa
+  16              	.global contarUnos
+  17              	
+  18              	
+  19              	.text
+  20              	
+  21              	contarUnos:
+  22 0000 F0432DE9 	  		push {r4,r5,r6,r7,r8,r9,lr}
+  23 0004 0040A0E3 			mov r4, #0@i=0
+  24              	
+  25 0008 020054E1 			for:cmp r4, r2
+  26 000c 140000AA 				bge fin
+  27 0010 0060A0E3 				mov r6, #0
+  28 0014 046181E7 				str r6, [r1, r4,lsl#2]
+  29 0018 0050A0E3 				mov r5, #0@j =0
+  30 001c 030055E1 				for2:cmp r5, r3
+  31 0020 0D0000AA 					bge fin2
+  32 0024 930408E0 					mul r8, r3,r4
+  33 0028 058088E0 					add r8,r8, r5
+  34 002c 087190E7 					ldr r7, [r0,r8,lsl#2 ]
+  35 0030 010057E3 					if:cmp r7, #1
+  36 0034 0600001A 						bne fin_for2
+  37 0038 049191E7 						ldr r9, [r1,r4,lsl#2 ]
+  38              						//add r9,r9,#1
+  39 003c 1B002DE9 						push {r0, r1,r3, r4}
+  40 0040 0100A0E1 						mov r0, r1
+  41 0044 0410A0E1 						mov r1, r4
+  42 0048 FEFFFFEB 						BL  incrementa
+  43              						//mov r9, r3
+  44              						/*mov r1, r0
+  45              						mov r4, r1*/
+  46 004c 1B00BDE8 						pop {r0, r1,r3, r4}
+  47              						//str r9, [r1,r4,lsl#2]
+  48 0050 FFFFFFEA 						b fin_for2
+  49 0054 015085E2 					fin_for2: add r5,r5, #1
+  50 0058 EFFFFFEA 							b for2
+  51 005c 014084E2 				fin2:add r4,r4,#1
+  52 0060 E8FFFFEA 					b for
+  53              	
+  54              			fin:
+  55 0064 F043BDE8 			pop {r4,r5,r6,r7,r8,r9,lr}
+  56 0068 0EF0A0E1 	  		mov pc , lr
+DEFINED SYMBOLS
+  ../rutinas_asm.asm:21     .text:00000000 contarUnos
+  ../rutinas_asm.asm:22     .text:00000000 $a
+  ../rutinas_asm.asm:25     .text:00000008 for
+  ../rutinas_asm.asm:54     .text:00000064 fin
+  ../rutinas_asm.asm:30     .text:0000001c for2
+  ../rutinas_asm.asm:51     .text:0000005c fin2
+  ../rutinas_asm.asm:35     .text:00000030 if
+  ../rutinas_asm.asm:49     .text:00000054 fin_for2
+                   .debug_aranges:0000000c $d
+
+UNDEFINED SYMBOLS
+incrementa
