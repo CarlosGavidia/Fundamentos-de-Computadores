@@ -1,0 +1,131 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"main.c"
+  21              	.Ltext0:
+  22              		.file 1 "../main.c"
+ 1003              		.align	2
+ 1004              		.global	main
+ 1006              	main:
+ 1007              	.LFB0:
+   1:../main.c     **** /*-----------------------------------------------------------------
+   2:../main.c     **** **
+   3:../main.c     **** **  Fichero:
+   4:../main.c     **** **    main.c  10/6/2014
+   5:../main.c     **** **
+   6:../main.c     **** **    Fundamentos de Computadores
+   7:../main.c     **** **    Dpto. de Arquitectura de Computadores y Automática
+   8:../main.c     **** **    Facultad de Informática. Universidad Complutense de Madrid
+   9:../main.c     **** **
+  10:../main.c     **** **  Propósito:
+  11:../main.c     **** **    Hace paradear los leds a una frecuencia de 1 Hz
+  12:../main.c     **** **
+  13:../main.c     **** **  Notas de diseño:
+  14:../main.c     **** **
+  15:../main.c     **** **---------------------------------------------------------------*/
+  16:../main.c     **** 
+  17:../main.c     **** #include "leds.h"
+  18:../main.c     **** #include "button.h"
+  19:../main.c     **** #include "D8Led.h"
+  20:../main.c     **** #include "utils.h"
+  21:../main.c     **** 
+  22:../main.c     **** int main(void)
+  23:../main.c     **** {
+ 1008              		.loc 1 23 0
+ 1009              		.cfi_startproc
+ 1010              		@ Function supports interworking.
+ 1011              		@ args = 0, pretend = 0, frame = 32
+ 1012              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1013 0000 0DC0A0E1 		mov	ip, sp
+ 1014              	.LCFI0:
+ 1015              		.cfi_def_cfa_register 12
+ 1016 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1017 0008 04B04CE2 		sub	fp, ip, #4
+ 1018              		.cfi_offset 14, -8
+ 1019              		.cfi_offset 13, -12
+ 1020              		.cfi_offset 11, -16
+ 1021              	.LCFI1:
+ 1022              		.cfi_def_cfa 11, 4
+ 1023 000c 20D04DE2 		sub	sp, sp, #32
+  24:../main.c     **** 
+  25:../main.c     **** 	/* Opción 1 */
+  26:../main.c     **** 	int segmento=0;
+ 1024              		.loc 1 26 0
+ 1025 0010 0030A0E3 		mov	r3, #0
+ 1026 0014 10300BE5 		str	r3, [fp, #-16]
+  27:../main.c     **** 	int direccion=1;
+ 1027              		.loc 1 27 0
+ 1028 0018 0130A0E3 		mov	r3, #1
+ 1029 001c 14300BE5 		str	r3, [fp, #-20]
+  28:../main.c     **** 	int movimiento=1;
+ 1030              		.loc 1 28 0
+ 1031 0020 0130A0E3 		mov	r3, #1
+ 1032 0024 18300BE5 		str	r3, [fp, #-24]
+  29:../main.c     **** 	
+  30:../main.c     **** 	/* Opción 2 */
+  31:../main.c     **** 	int cadena = 0;
+ 1033              		.loc 1 31 0
+ 1034 0028 0030A0E3 		mov	r3, #0
+ 1035 002c 1C300BE5 		str	r3, [fp, #-28]
+  32:../main.c     **** 	int p = 1;
+ 1036              		.loc 1 32 0
+ 1037 0030 0130A0E3 		mov	r3, #1
+ 1038 0034 20300BE5 		str	r3, [fp, #-32]
+  33:../main.c     **** 	int car = 0;
+ 1039              		.loc 1 33 0
+ 1040 0038 0030A0E3 		mov	r3, #0
+ 1041 003c 24300BE5 		str	r3, [fp, #-36]
+  34:../main.c     **** 
+  35:../main.c     **** 	/* Ambas */
+  36:../main.c     **** 	int muestras = 0;
+ 1042              		.loc 1 36 0
+ 1043 0040 0030A0E3 		mov	r3, #0
+ 1044 0044 28300BE5 		str	r3, [fp, #-40]
+  37:../main.c     **** 	unsigned int pulsador;
+  38:../main.c     **** 		
+  39:../main.c     ****     leds_init();
+ 1045              		.loc 1 39 0
+ 1046 0048 FEFFFFEB 		bl	leds_init
+  40:../main.c     ****     button_init();
+ 1047              		.loc 1 40 0
+ 1048 004c FEFFFFEB 		bl	button_init
+  41:../main.c     ****     D8Led_init();
+ 1049              		.loc 1 41 0
+ 1050 0050 FEFFFFEB 		bl	D8Led_init
+ 1051              	.L2:
+  42:../main.c     **** 
+  43:../main.c     **** 	/* Guiones */
+  44:../main.c     ****     while( 1 ){
+  45:../main.c     ****         leds_switch();
+ 1052              		.loc 1 45 0 discriminator 1
+ 1053 0054 FEFFFFEB 		bl	leds_switch
+  46:../main.c     ****         // espera 1s
+  47:../main.c     ****         Delay( 1000 );
+ 1054              		.loc 1 47 0 discriminator 1
+ 1055 0058 FA0FA0E3 		mov	r0, #1000
+ 1056 005c FEFFFFEB 		bl	Delay
+  48:../main.c     ****     }
+ 1057              		.loc 1 48 0 discriminator 1
+ 1058 0060 FBFFFFEA 		b	.L2
+ 1059              		.cfi_endproc
+ 1060              	.LFE0:
+ 1062              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\Marcos\AppData\Local\Temp\cc7faT3w.s:1003   .text:00000000 $a
+C:\Users\Marcos\AppData\Local\Temp\cc7faT3w.s:1006   .text:00000000 main
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+leds_init
+button_init
+D8Led_init
+leds_switch
+Delay

@@ -1,0 +1,159 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"button.c"
+  21              	.Ltext0:
+  22              		.file 1 "../button.c"
+ 1017              		.align	2
+ 1018              		.global	button_init
+ 1020              	button_init:
+ 1021              	.LFB0:
+   1:../button.c   **** /*-------------------------------------------------------------------
+   2:../button.c   **** **
+   3:../button.c   **** **  Fichero:
+   4:../button.c   **** **    button.c  10/6/2014
+   5:../button.c   **** **
+   6:../button.c   **** **    Fundamentos de Computadores
+   7:../button.c   **** **    Dpto. de Arquitectura de Computadores y Automática
+   8:../button.c   **** **    Facultad de Informática. Universidad Complutense de Madrid
+   9:../button.c   **** **
+  10:../button.c   **** **  Propósito:
+  11:../button.c   **** **    Contiene las implementación de las funciones
+  12:../button.c   **** **    para el acceso a los pulsadores de la placa de prototipado
+  13:../button.c   **** **
+  14:../button.c   **** **  Notas de diseño:
+  15:../button.c   **** **
+  16:../button.c   **** **-----------------------------------------------------------------*/
+  17:../button.c   **** 
+  18:../button.c   **** #include "ports.h"
+  19:../button.c   **** #include "button.h"
+  20:../button.c   **** 
+  21:../button.c   **** // macros para seleccionar
+  22:../button.c   **** // los bits 6 y 7 del puerto
+  23:../button.c   **** #define BUTTONS (0x3 << 6)
+  24:../button.c   **** 
+  25:../button.c   **** 
+  26:../button.c   **** void button_init( void )
+  27:../button.c   **** {
+ 1022              		.loc 1 27 0
+ 1023              		.cfi_startproc
+ 1024              		@ Function supports interworking.
+ 1025              		@ args = 0, pretend = 0, frame = 0
+ 1026              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1027 0000 0DC0A0E1 		mov	ip, sp
+ 1028              	.LCFI0:
+ 1029              		.cfi_def_cfa_register 12
+ 1030 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1031 0008 04B04CE2 		sub	fp, ip, #4
+ 1032              		.cfi_offset 14, -8
+ 1033              		.cfi_offset 13, -12
+ 1034              		.cfi_offset 11, -16
+ 1035              	.LCFI1:
+ 1036              		.cfi_def_cfa 11, 4
+  28:../button.c   **** 	rPCONG &= ~( 0xF << 12 );
+ 1037              		.loc 1 28 0
+ 1038 000c 18309FE5 		ldr	r3, .L2
+ 1039 0010 14209FE5 		ldr	r2, .L2
+ 1040 0014 002092E5 		ldr	r2, [r2, #0]
+ 1041 0018 0F2AC2E3 		bic	r2, r2, #61440
+ 1042 001c 002083E5 		str	r2, [r3, #0]
+  29:../button.c   **** }
+ 1043              		.loc 1 29 0
+ 1044 0020 0CD04BE2 		sub	sp, fp, #12
+ 1045 0024 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1046 0028 1EFF2FE1 		bx	lr
+ 1047              	.L3:
+ 1048              		.align	2
+ 1049              	.L2:
+ 1050 002c 4000D201 		.word	30539840
+ 1051              		.cfi_endproc
+ 1052              	.LFE0:
+ 1054              		.align	2
+ 1055              		.global	read_button
+ 1057              	read_button:
+ 1058              	.LFB1:
+  30:../button.c   **** 
+  31:../button.c   **** unsigned int read_button( int wait )
+  32:../button.c   **** {
+ 1059              		.loc 1 32 0
+ 1060              		.cfi_startproc
+ 1061              		@ Function supports interworking.
+ 1062              		@ args = 0, pretend = 0, frame = 16
+ 1063              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1064 0030 0DC0A0E1 		mov	ip, sp
+ 1065              	.LCFI2:
+ 1066              		.cfi_def_cfa_register 12
+ 1067 0034 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1068 0038 04B04CE2 		sub	fp, ip, #4
+ 1069              		.cfi_offset 14, -8
+ 1070              		.cfi_offset 13, -12
+ 1071              		.cfi_offset 11, -16
+ 1072              	.LCFI3:
+ 1073              		.cfi_def_cfa 11, 4
+ 1074 003c 10D04DE2 		sub	sp, sp, #16
+ 1075 0040 18000BE5 		str	r0, [fp, #-24]
+ 1076              	.L6:
+  33:../button.c   **** 	unsigned int status;
+  34:../button.c   **** 	do {
+  35:../button.c   **** 		status = ~( rPDATG );
+ 1077              		.loc 1 35 0 discriminator 1
+ 1078 0044 50309FE5 		ldr	r3, .L7
+ 1079 0048 003093E5 		ldr	r3, [r3, #0]
+ 1080 004c 0330E0E1 		mvn	r3, r3
+ 1081 0050 10300BE5 		str	r3, [fp, #-16]
+  36:../button.c   **** 		status = status & BUTTONS;
+ 1082              		.loc 1 36 0 discriminator 1
+ 1083 0054 10301BE5 		ldr	r3, [fp, #-16]
+ 1084 0058 C03003E2 		and	r3, r3, #192
+ 1085 005c 10300BE5 		str	r3, [fp, #-16]
+  37:../button.c   **** 	} while( status == 0 && wait );
+ 1086              		.loc 1 37 0 discriminator 1
+ 1087 0060 10301BE5 		ldr	r3, [fp, #-16]
+ 1088 0064 000053E3 		cmp	r3, #0
+ 1089 0068 0200001A 		bne	.L5
+ 1090 006c 18301BE5 		ldr	r3, [fp, #-24]
+ 1091 0070 000053E3 		cmp	r3, #0
+ 1092 0074 F2FFFF1A 		bne	.L6
+ 1093              	.L5:
+  38:../button.c   **** 
+  39:../button.c   **** 	status = (status >> 6) & 0x03;
+ 1094              		.loc 1 39 0
+ 1095 0078 10301BE5 		ldr	r3, [fp, #-16]
+ 1096 007c 2333A0E1 		mov	r3, r3, lsr #6
+ 1097 0080 033003E2 		and	r3, r3, #3
+ 1098 0084 10300BE5 		str	r3, [fp, #-16]
+  40:../button.c   **** 
+  41:../button.c   **** 	return status;
+ 1099              		.loc 1 41 0
+ 1100 0088 10301BE5 		ldr	r3, [fp, #-16]
+  42:../button.c   **** }
+ 1101              		.loc 1 42 0
+ 1102 008c 0300A0E1 		mov	r0, r3
+ 1103 0090 0CD04BE2 		sub	sp, fp, #12
+ 1104 0094 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1105 0098 1EFF2FE1 		bx	lr
+ 1106              	.L8:
+ 1107              		.align	2
+ 1108              	.L7:
+ 1109 009c 4400D201 		.word	30539844
+ 1110              		.cfi_endproc
+ 1111              	.LFE1:
+ 1113              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 button.c
+C:\Users\Marcos\AppData\Local\Temp\ccVYStxI.s:1017   .text:00000000 $a
+C:\Users\Marcos\AppData\Local\Temp\ccVYStxI.s:1020   .text:00000000 button_init
+C:\Users\Marcos\AppData\Local\Temp\ccVYStxI.s:1050   .text:0000002c $d
+C:\Users\Marcos\AppData\Local\Temp\ccVYStxI.s:1054   .text:00000030 $a
+C:\Users\Marcos\AppData\Local\Temp\ccVYStxI.s:1057   .text:00000030 read_button
+C:\Users\Marcos\AppData\Local\Temp\ccVYStxI.s:1109   .text:0000009c $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

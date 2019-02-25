@@ -1,0 +1,190 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ./D8Led.o
+LOAD ./button.o
+LOAD ./init.o
+LOAD ./leds.o
+LOAD ./main.o
+LOAD ./utils.o
+START GROUP
+LOAD c:/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a
+LOAD c:/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib\libc.a
+END GROUP
+                0x0c000000                . = 0xc000000
+
+.data           0x0c000000       0x60
+ *(.data)
+ .data          0x0c000000       0x60 ./D8Led.o
+ .data          0x0c000060        0x0 ./button.o
+ .data          0x0c000060        0x0 ./init.o
+ .data          0x0c000060        0x0 ./leds.o
+ .data          0x0c000060        0x0 ./main.o
+ .data          0x0c000060        0x0 ./utils.o
+ *(.rodata)
+
+.bss            0x0c000060        0x4
+ *(.bss)
+ .bss           0x0c000060        0x0 ./D8Led.o
+ .bss           0x0c000060        0x0 ./button.o
+ .bss           0x0c000060        0x0 ./init.o
+ .bss           0x0c000060        0x4 ./leds.o
+ .bss           0x0c000064        0x0 ./main.o
+ .bss           0x0c000064        0x0 ./utils.o
+
+.text           0x0c000064      0x510
+ *(.text)
+ .text          0x0c000064       0xdc ./D8Led.o
+                0x0c000064                D8Led_init
+                0x0c000088                D8Led_segment
+                0x0c0000e4                D8Led_digit
+ .text          0x0c000140       0xa0 ./button.o
+                0x0c000140                button_init
+                0x0c000170                read_button
+ .text          0x0c0001e0       0x14 ./init.o
+                0x0c0001e0                start
+ .text          0x0c0001f4      0x2b8 ./leds.o
+                0x0c0001f4                leds_init
+                0x0c000234                led1_on
+                0x0c000274                led1_off
+                0x0c0002b4                led2_on
+                0x0c0002f4                led2_off
+                0x0c000334                led1_switch
+                0x0c000374                led2_switch
+                0x0c0003b4                leds_switch
+                0x0c0003f4                leds_display
+ .text          0x0c0004ac       0x64 ./main.o
+                0x0c0004ac                main
+ .text          0x0c000510       0x64 ./utils.o
+                0x0c000510                Delay
+                0x0c000574                PROVIDE (end, .)
+                0x0c700800                PROVIDE (_stack, 0xc700800)
+OUTPUT(pract5.elf elf32-littlearm)
+
+.glue_7         0x0c000574        0x0
+ .glue_7        0x00000000        0x0 linker stubs
+
+.glue_7t        0x0c000574        0x0
+ .glue_7t       0x00000000        0x0 linker stubs
+
+.vfp11_veneer   0x0c000574        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x0c000574        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.debug_abbrev   0x00000000      0x245
+ .debug_abbrev  0x00000000       0x88 ./D8Led.o
+ .debug_abbrev  0x00000088       0x78 ./button.o
+ .debug_abbrev  0x00000100       0x14 ./init.o
+ .debug_abbrev  0x00000114       0x6b ./leds.o
+ .debug_abbrev  0x0000017f       0x70 ./main.o
+ .debug_abbrev  0x000001ef       0x56 ./utils.o
+
+.debug_info     0x00000000      0x400
+ .debug_info    0x00000000       0xdf ./D8Led.o
+ .debug_info    0x000000df       0x87 ./button.o
+ .debug_info    0x00000166       0x62 ./init.o
+ .debug_info    0x000001c8      0x112 ./leds.o
+ .debug_info    0x000002da       0xc1 ./main.o
+ .debug_info    0x0000039b       0x65 ./utils.o
+
+.debug_line     0x00000000      0x27f
+ .debug_line    0x00000000       0x6f ./D8Led.o
+ .debug_line    0x0000006f       0x6d ./button.o
+ .debug_line    0x000000dc       0x3e ./init.o
+ .debug_line    0x0000011a       0x7c ./leds.o
+ .debug_line    0x00000196       0x8a ./main.o
+ .debug_line    0x00000220       0x5f ./utils.o
+
+.debug_macinfo  0x00000000     0xb007
+ .debug_macinfo
+                0x00000000     0x2794 ./D8Led.o
+ .debug_macinfo
+                0x00002794     0x22f4 ./button.o
+ .debug_macinfo
+                0x00004a88     0x2301 ./leds.o
+ .debug_macinfo
+                0x00006d89     0x215f ./main.o
+ .debug_macinfo
+                0x00008ee8     0x211f ./utils.o
+
+.debug_loc      0x00000000      0x2c0
+ .debug_loc     0x00000000       0x84 ./D8Led.o
+ .debug_loc     0x00000084       0x58 ./button.o
+ .debug_loc     0x000000dc      0x18c ./leds.o
+ .debug_loc     0x00000268       0x2c ./main.o
+ .debug_loc     0x00000294       0x2c ./utils.o
+
+.debug_pubnames
+                0x00000000      0x13f
+ .debug_pubnames
+                0x00000000       0x43 ./D8Led.o
+ .debug_pubnames
+                0x00000043       0x32 ./button.o
+ .debug_pubnames
+                0x00000075       0x93 ./leds.o
+ .debug_pubnames
+                0x00000108       0x1b ./main.o
+ .debug_pubnames
+                0x00000123       0x1c ./utils.o
+
+.debug_aranges  0x00000000       0xc0
+ .debug_aranges
+                0x00000000       0x20 ./D8Led.o
+ .debug_aranges
+                0x00000020       0x20 ./button.o
+ .debug_aranges
+                0x00000040       0x20 ./init.o
+ .debug_aranges
+                0x00000060       0x20 ./leds.o
+ .debug_aranges
+                0x00000080       0x20 ./main.o
+ .debug_aranges
+                0x000000a0       0x20 ./utils.o
+
+.debug_str      0x00000000      0x184
+ .debug_str     0x00000000       0x8c ./D8Led.o
+ .debug_str     0x0000008c       0x29 ./button.o
+                                 0x76 (size before relaxing)
+ .debug_str     0x000000b5       0x73 ./leds.o
+                                 0xc0 (size before relaxing)
+ .debug_str     0x00000128       0x46 ./main.o
+                                 0x8c (size before relaxing)
+ .debug_str     0x0000016e       0x16 ./utils.o
+                                 0x4f (size before relaxing)
+
+.comment        0x00000000       0x2a
+ .comment       0x00000000       0x2a ./D8Led.o
+                                 0x2b (size before relaxing)
+ .comment       0x00000000       0x2b ./button.o
+ .comment       0x00000000       0x2b ./leds.o
+ .comment       0x00000000       0x2b ./main.o
+ .comment       0x00000000       0x2b ./utils.o
+
+.ARM.attributes
+                0x00000000       0x30
+ .ARM.attributes
+                0x00000000       0x32 ./D8Led.o
+ .ARM.attributes
+                0x00000032       0x32 ./button.o
+ .ARM.attributes
+                0x00000064       0x22 ./init.o
+ .ARM.attributes
+                0x00000086       0x32 ./leds.o
+ .ARM.attributes
+                0x000000b8       0x32 ./main.o
+ .ARM.attributes
+                0x000000ea       0x32 ./utils.o
+
+.debug_frame    0x00000000      0x250
+ .debug_frame   0x00000000       0x70 ./D8Led.o
+ .debug_frame   0x00000070       0x50 ./button.o
+ .debug_frame   0x000000c0      0x130 ./leds.o
+ .debug_frame   0x000001f0       0x30 ./main.o
+ .debug_frame   0x00000220       0x30 ./utils.o
