@@ -1,3 +1,4 @@
+@ Para la suma de dos numeros
 .global start
 .data
 C: 				.word 0X00
